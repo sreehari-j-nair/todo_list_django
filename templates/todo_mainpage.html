@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signin Page - To-Do List Web Application</title>
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/cb792c0850.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #121212; /* Dark background */
+    color: #ffffff; /* White text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+        }
+
+        .heading {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        /* Increase size of the signup container */
+        .signup-container {
+            background-color: #1e1e1e;
+            padding: 40px; /* More padding for a larger container */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            width: 450px; /* Increase width */
+            height: 550px; /* Set fixed height */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Keep content centered */
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .input-container {
+            position: relative;
+            margin: 10px 0;
+        }
+
+        input {
+            width: 89%;
+            padding: 10px;
+            padding-right: 40px;
+            border: 1px solid #333;
+            border-radius: 4px;
+            background-color: #333;
+            color: #fff;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #555;
+        }
+
+        .eye-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #ffffff;
+        }
+
+        .signup-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #6200ea;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .signup-btn:hover {
+            background-color: #3700b3;
+        }
+
+        .signin-text {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .signin-text a {
+            color: #bb86fc;
+            text-decoration: none;
+        }
+
+        .signin-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* Increase the height of task-list */
+        .task-list {
+            margin-top: 20px;
+            max-height: 250px; /* Adjusted height */
+            overflow-y: auto;
+            background-color: #333;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        /* Styling for task-item */
+        .task-item {
+            padding: 10px; /* Adjust padding */
+            background-color: #444;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            display: flex; /* Align items horizontally */
+            justify-content: space-between; /* Space between task title and icons */
+            align-items: center; /* Align items vertically in the center */
+        }
+
+        .task-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* White icons */
+        .task-item a {
+            color: #fff;
+            margin-left: 10px; /* Space between icons */
+        }
+
+        .task-item i {
+            font-size: 18px; /* Adjust icon size if needed */
+        }
+        .task-item i:hover{
+            color: #8f8f8f;
+        }
+
+        /* Task title margin and flex alignment */
+        .task-item p {
+            margin: 0;
+            flex-grow: 1; /* Task title takes up available space */
+            margin-right: 10px; /* Space between task title and icons */
+        }
+
+        .head-cont{
+            display: flex; /* Align items horizontally */
+            justify-content: space-between; /* Space between task title and icons */
+            align-items: center; /* Align items vertically in the center */
+        }
+        .head-cont i
+        {
+            color: white;
+        }
+        .head-cont i:hover{
+            color: #8f8f8f;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="heading">
+        Get your Things done?
+    </div>
+
+    <div class="signup-container">
+        <div class="head-cont">
+            <h3>Hello {{name}}</h3>
+            <a href="{% url 'signout'%}"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+        </div>
+        {% if messages %}
+            <div>
+                {% for message in messages %}
+                    {% if forloop.last %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+        <form action="index", method="POST">
+            {% csrf_token %}
+            <div class="input-container">
+                <input type="text" name="task" placeholder="Enter the task" required>
+            </div>
+            <button type="submit" class="signup-btn">Add Task</button>
+        </form>
+
+        <!-- Scrollable area for tasks -->
+        <div class="task-list">
+            <!-- Example task items -->
+            <!-- Dynamically generated tasks go here -->
+            {% for res in result %}
+                <div class="task-item">
+                    <i class="fa-regular fa-circle-dot fa-2xs" style="color: #808389;"></i>
+                    <p>&nbsp;&nbsp;&nbsp;{{res.title}}</p>
+                    <div>
+                        <a href="{% url 'edit_todo' res.srno %}"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <a href="{% url 'delete_todo' res.srno %}"><i class="fa-solid fa-trash"></i></a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</body>
+</html>
